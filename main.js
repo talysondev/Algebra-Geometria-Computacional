@@ -320,3 +320,35 @@ testarTransformacao(
     transformacoes.shearing(new Vector(2, [1, 2]), 2, 3),
     [5, 5]
 );
+
+
+// =====================================================
+// AV2 - TESTES DE PROJEÇÕES ORTOGONAIS
+// Em 3D, a projeção é sobre o eixo indicado (não sobre um plano).
+// =====================================================
+console.log("\nAV2 - Testes de projeções ortogonais:");
+testarTransformacao(
+    "Projeção 2D no eixo X",
+    transformacoes.projection2DX(new Vector(2, [2, 3])),
+    [2, 0]
+);
+testarTransformacao(
+    "Projeção 2D no eixo Y",
+    transformacoes.projection2DY(new Vector(2, [2, 3])),
+    [0, 3]
+);
+testarTransformacao(
+    "Projeção 3D no eixo X",
+    transformacoes.projection3DX(new Vector(3, [2, 3, 4])),
+    [2, 0, 0]
+);
+testarTransformacao(
+    "Projeção 3D no eixo Y",
+    transformacoes.projection3DY(new Vector(3, [2, 3, 4])),
+    [0, 3, 0]
+);
+testarTransformacao(
+    "Projeção 3D no eixo Z",
+    transformacoes.projection3DZ(new Vector(3, [2, 3, 4])),
+    [0, 0, 4]
+);
