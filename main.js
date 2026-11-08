@@ -245,3 +245,41 @@ const ponto3DMovido = transformacoes.translate3D(ponto3D, 3, 2, -5);
 console.log("\nAV2 - Translação 3D:");
 console.log("Original:", ponto3D.elements);
 console.log("Transformado:", ponto3DMovido.elements); // [5, 1, -1]
+
+
+// =====================================================
+// AV2 - TESTES DE ROTAÇÃO EM COORDENADAS HOMOGÊNEAS
+// Ângulos em radianos.  Math.PI / 2 = 90 graus.
+// =====================================================
+const angulo90 = Math.PI / 2;
+
+function testarTransformacao(nome, obtido, esperado) {
+    const tolerancia = 1e-10;
+    if (obtido.dim !== esperado.length ||
+        !obtido.elements.every((valor, i) => Math.abs(valor - esperado[i]) < tolerancia)) {
+        throw new Error(`${nome}: resultado inesperado: ${JSON.stringify(obtido.elements)}`);
+    }
+    console.log(`${nome}: OK`, obtido.elements);
+}
+
+console.log("\nAV2 - Testes das quatro rotações:");
+testarTransformacao(
+    "Rotação 2D (90 graus)",
+    transformacoes.rotation2D(new Vector(2, [1, 0]), angulo90),
+    [0, 1]
+);
+testarTransformacao(
+    "Rotação 3D eixo X (90 graus)",
+    transformacoes.rotation3DX(new Vector(3, [0, 1, 0]), angulo90),
+    [0, 0, 1]
+);
+testarTransformacao(
+    "Rotação 3D eixo Y (90 graus)",
+    transformacoes.rotation3DY(new Vector(3, [0, 0, 1]), angulo90),
+    [1, 0, 0]
+);
+testarTransformacao(
+    "Rotação 3D eixo Z (90 graus)",
+    transformacoes.rotation3DZ(new Vector(3, [1, 0, 0]), angulo90),
+    [0, 1, 0]
+);
