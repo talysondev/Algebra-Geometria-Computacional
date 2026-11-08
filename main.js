@@ -283,3 +283,40 @@ testarTransformacao(
     transformacoes.rotation3DZ(new Vector(3, [1, 0, 0]), angulo90),
     [0, 1, 0]
 );
+
+
+// =====================================================
+// AV2 - TESTES DE REFLEXÕES E CISALHAMENTO
+// Reflexões 3D nos planos YZ, XZ e XY, respectivamente.
+// =====================================================
+console.log("\nAV2 - Testes de reflexão e cisalhamento:");
+testarTransformacao(
+    "Reflexão 2D eixo X",
+    transformacoes.reflection2DX(new Vector(2, [2, 3])),
+    [2, -3]
+);
+testarTransformacao(
+    "Reflexão 2D eixo Y",
+    transformacoes.reflection2DY(new Vector(2, [2, 3])),
+    [-2, 3]
+);
+testarTransformacao(
+    "Reflexão 3D plano YZ (X)",
+    transformacoes.reflection3DX(new Vector(3, [2, 3, 4])),
+    [-2, 3, 4]
+);
+testarTransformacao(
+    "Reflexão 3D plano XZ (Y)",
+    transformacoes.reflection3DY(new Vector(3, [2, 3, 4])),
+    [2, -3, 4]
+);
+testarTransformacao(
+    "Reflexão 3D plano XY (Z)",
+    transformacoes.reflection3DZ(new Vector(3, [2, 3, 4])),
+    [2, 3, -4]
+);
+testarTransformacao(
+    "Cisalhamento 2D (kx=2, ky=3)",
+    transformacoes.shearing(new Vector(2, [1, 2]), 2, 3),
+    [5, 5]
+);
