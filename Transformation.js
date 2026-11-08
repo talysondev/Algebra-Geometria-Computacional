@@ -124,4 +124,71 @@ export default class Tranformations {
             throw new Error("O ângulo deve ser um número finito, em radianos.");
         }
     }
+
+    // Reflexão 2D em relação ao eixo X: mantém X e inverte Y.
+    reflection2DX(vector) {
+        const matriz = new Matrix(3, 3, [
+            1, 0, 0,
+            0, -1, 0,
+            0, 0, 1
+        ]);
+        return this._aplicarTransformacao(vector, matriz, 2);
+    }
+
+    // Reflexão 2D em relação ao eixo Y: inverte X e mantém Y.
+    reflection2DY(vector) {
+        const matriz = new Matrix(3, 3, [
+            -1, 0, 0,
+            0, 1, 0,
+            0, 0, 1
+        ]);
+        return this._aplicarTransformacao(vector, matriz, 2);
+    }
+
+    // Em 3D, a reflexão associada ao X ocorre no plano YZ:
+    // inverte X e mantém Y e Z.
+    reflection3DX(vector) {
+        const matriz = new Matrix(4, 4, [
+            -1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        ]);
+        return this._aplicarTransformacao(vector, matriz, 3);
+    }
+
+    // Reflexão 3D no plano XZ: inverte Y e mantém X e Z.
+    reflection3DY(vector) {
+        const matriz = new Matrix(4, 4, [
+            1, 0, 0, 0,
+            0, -1, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        ]);
+        return this._aplicarTransformacao(vector, matriz, 3);
+    }
+
+    // Reflexão 3D no plano XY: inverte Z e mantém X e Y.
+    reflection3DZ(vector) {
+        const matriz = new Matrix(4, 4, [
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, -1, 0,
+            0, 0, 0, 1
+        ]);
+        return this._aplicarTransformacao(vector, matriz, 3);
+    }
+
+    // Cisalhamento 2D: x' = x + kx*y; y' = y + ky*x.
+    shearing(vector, kx, ky) {
+        if (![kx, ky].every(Number.isFinite)) {
+            throw new Error("kx e ky devem ser números finitos.");
+        }
+        const matriz = new Matrix(3, 3, [
+            1, kx, 0,
+            ky, 1, 0,
+            0, 0, 1
+        ]);
+        return this._aplicarTransformacao(vector, matriz, 2);
+    }
 }
