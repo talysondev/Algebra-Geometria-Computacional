@@ -191,4 +191,59 @@ export default class Tranformations {
         ]);
         return this._aplicarTransformacao(vector, matriz, 2);
     }
+
+    // Projeção ortogonal 2D sobre o eixo X: mantém X e zera Y
+    // (a "sombra" do ponto sobre o eixo X). A matriz é singular
+    // e idempotente (P·P = P), característica de toda projeção.
+    projection2DX(vector) {
+        const matriz = new Matrix(3, 3, [
+            1, 0, 0,
+            0, 0, 0,
+            0, 0, 1
+        ]);
+        return this._aplicarTransformacao(vector, matriz, 2);
+    }
+
+    // Projeção ortogonal 2D sobre o eixo Y: zera X e mantém Y.
+    projection2DY(vector) {
+        const matriz = new Matrix(3, 3, [
+            0, 0, 0,
+            0, 1, 0,
+            0, 0, 1
+        ]);
+        return this._aplicarTransformacao(vector, matriz, 2);
+    }
+
+    // Projeção ortogonal 3D sobre o eixo X: mantém X e zera Y e Z.
+    projection3DX(vector) {
+        const matriz = new Matrix(4, 4, [
+            1, 0, 0, 0,
+            0, 0, 0, 0,
+            0, 0, 0, 0,
+            0, 0, 0, 1
+        ]);
+        return this._aplicarTransformacao(vector, matriz, 3);
+    }
+
+    // Projeção ortogonal 3D sobre o eixo Y: zera X e Z e mantém Y.
+    projection3DY(vector) {
+        const matriz = new Matrix(4, 4, [
+            0, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 0, 0,
+            0, 0, 0, 1
+        ]);
+        return this._aplicarTransformacao(vector, matriz, 3);
+    }
+
+    // Projeção ortogonal 3D sobre o eixo Z: zera X e Y e mantém Z.
+    projection3DZ(vector) {
+        const matriz = new Matrix(4, 4, [
+            0, 0, 0, 0,
+            0, 0, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        ]);
+        return this._aplicarTransformacao(vector, matriz, 3);
+    }
 }
