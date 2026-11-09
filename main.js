@@ -287,7 +287,7 @@ testarTransformacao(
 
 // =====================================================
 // AV2 - TESTES DE REFLEXÕES E CISALHAMENTO
-// Reflexões 3D nos planos YZ, XZ e XY, respectivamente.
+// Reflexões 3D em relação aos eixos X, Y e Z (simetria axial).
 // =====================================================
 console.log("\nAV2 - Testes de reflexão e cisalhamento:");
 testarTransformacao(
@@ -301,19 +301,19 @@ testarTransformacao(
     [-2, 3]
 );
 testarTransformacao(
-    "Reflexão 3D plano YZ (X)",
+    "Reflexão 3D em relação ao eixo X",
     transformacoes.reflection3DX(new Vector(3, [2, 3, 4])),
-    [-2, 3, 4]
+    [2, -3, -4]
 );
 testarTransformacao(
-    "Reflexão 3D plano XZ (Y)",
+    "Reflexão 3D em relação ao eixo Y",
     transformacoes.reflection3DY(new Vector(3, [2, 3, 4])),
-    [2, -3, 4]
+    [-2, 3, -4]
 );
 testarTransformacao(
-    "Reflexão 3D plano XY (Z)",
+    "Reflexão 3D em relação ao eixo Z",
     transformacoes.reflection3DZ(new Vector(3, [2, 3, 4])),
-    [2, 3, -4]
+    [-2, -3, 4]
 );
 testarTransformacao(
     "Cisalhamento 2D (kx=2, ky=3)",
@@ -352,3 +352,29 @@ testarTransformacao(
     transformacoes.projection3DZ(new Vector(3, [2, 3, 4])),
     [0, 0, 4]
 );
+
+
+// =====================================================
+// AV2 - DEMONSTRAÇÃO DOS DOIS TIPOS DE CISALHAMENTO
+// Mesmo método: ky = 0 -> horizontal; kx = 0 -> vertical.
+// =====================================================
+console.log("\nAV2 - Cisalhamento horizontal e vertical:");
+testarTransformacao(
+    "Cisalhamento horizontal (kx=2, ky=0)",
+    transformacoes.shearing(new Vector(2, [2, 3]), 2, 0),
+    [8, 3]
+);
+testarTransformacao(
+    "Cisalhamento vertical (kx=0, ky=2)",
+    transformacoes.shearing(new Vector(2, [2, 3]), 0, 2),
+    [2, 7]
+);
+
+// Verifica a normalização de resultados de rotações de 90 graus.
+const rotacao90Exata = transformacoes.rotation2D(
+    new Vector(2, [1, 0]), Math.PI / 2
+);
+if (rotacao90Exata.elements[0] !== 0) {
+    throw new Error("Rotação de 90 graus deveria retornar X exatamente zero.");
+}
+console.log("Rotação 90° sem resíduo numérico:", rotacao90Exata.elements);
