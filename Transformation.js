@@ -63,9 +63,11 @@ export default class Tranformations {
     // Os valores 0 e 1 completam a matriz homogênea. Essa matriz permite girar o vetor em torno da origem(0,0), sem alterar o seu tamanho
     rotation2D(vector, angle) {
         this._validarAngulo(angle);
+        const c = this._normalizarTrig(Math.cos(angle));
+        const sen = this._normalizarTrig(Math.sin(angle));
         const matrix = new Matrix(3, 3, [
-            Math.cos(angle), -Math.sin(angle), 0,
-            Math.sin(angle), Math.cos(angle), 0,
+            c, -sen, 0,
+            sen, c, 0,
             0, 0, 1
         ]);
         return this._aplicarTransformacao(vector, matrix, 2);
@@ -76,10 +78,12 @@ export default class Tranformations {
     // Conforme o ângulo informado em radianos
     rotation3DX(vector, angle) {
         this._validarAngulo(angle);
+        const c = this._normalizarTrig(Math.cos(angle));
+        const sen = this._normalizarTrig(Math.sin(angle));
         const matrix = new Matrix(4, 4, [
             1, 0, 0, 0,
-            0, Math.cos(angle), -Math.sin(angle), 0,
-            0, Math.sin(angle), Math.cos(angle), 0,
+            0, c, -sen, 0,
+            0, sen, c, 0,
             0, 0, 0, 1
         ]);
         return this._aplicarTransformacao(vector, matrix, 3);
@@ -90,10 +94,12 @@ export default class Tranformations {
     // conforme o ângulo informado em radianos.
     rotation3DY(vector, angle) {
         this._validarAngulo(angle);
+        const c = this._normalizarTrig(Math.cos(angle));
+        const sen = this._normalizarTrig(Math.sin(angle));
         const matrix = new Matrix(4, 4, [
-            Math.cos(angle), 0, Math.sin(angle), 0,
+            c, 0, sen, 0,
             0, 1, 0, 0,
-            -Math.sin(angle), 0, Math.cos(angle), 0,
+            -sen, 0, c, 0,
             0, 0, 0, 1
         ]);
         return this._aplicarTransformacao(vector, matrix, 3);
@@ -104,9 +110,11 @@ export default class Tranformations {
     // conforme o ângulo informado em radianos.
     rotation3DZ(vector, angle) {
         this._validarAngulo(angle);
+        const c = this._normalizarTrig(Math.cos(angle));
+        const sen = this._normalizarTrig(Math.sin(angle));
         const matrix = new Matrix(4, 4, [
-            Math.cos(angle), -Math.sin(angle), 0, 0,
-            Math.sin(angle), Math.cos(angle), 0, 0,
+            c, -sen, 0, 0,
+            sen, c, 0, 0,
             0, 0, 1, 0,
             0, 0, 0, 1
         ]);
@@ -117,6 +125,17 @@ export default class Tranformations {
     // para que ambos os nomes funcionem na correção automática.
     roration2D(vector, angle) {
         return this.rotation2D(vector, angle);
+    }
+
+    // Corrige resíduos de ponto flutuante em seno/cosseno de ângulos
+    // notáveis, como cos(PI/2) ~= 6.12e-17, antes da multiplicação.
+    // Não arredonda coordenadas arbitrárias de outras transformações.
+    _normalizarTrig(valor) {
+        const tolerancia = 1e-12;
+        if (Math.abs(valor) < tolerancia) return 0;
+        if (Math.abs(valor - 1) < tolerancia) return 1;
+        if (Math.abs(valor + 1) < tolerancia) return -1;
+        return valor;
     }
 
     _validarAngulo(angle) {
@@ -145,35 +164,37 @@ export default class Tranformations {
         return this._aplicarTransformacao(vector, matriz, 2);
     }
 
-    // Em 3D, a reflexão associada ao X ocorre no plano YZ:
-    // inverte X e mantém Y e Z.
+    // Simetria em relação ao eixo X em 3D:
+    // mantém X e inverte Y e Z (equivalente a uma rotação de 180° em X).
     reflection3DX(vector) {
-        const matriz = new Matrix(4, 4, [
-            -1, 0, 0, 0,
-            0, 1, 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1
-        ]);
-        return this._aplicarTransformacao(vector, matriz, 3);
-    }
-
-    // Reflexão 3D no plano XZ: inverte Y e mantém X e Z.
-    reflection3DY(vector) {
         const matriz = new Matrix(4, 4, [
             1, 0, 0, 0,
             0, -1, 0, 0,
-            0, 0, 1, 0,
+            0, 0, -1, 0,
             0, 0, 0, 1
         ]);
         return this._aplicarTransformacao(vector, matriz, 3);
     }
 
-    // Reflexão 3D no plano XY: inverte Z e mantém X e Y.
-    reflection3DZ(vector) {
+    // Simetria em relação ao eixo Y em 3D:
+    // mantém Y e inverte X e Z.
+    reflection3DY(vector) {
         const matriz = new Matrix(4, 4, [
-            1, 0, 0, 0,
+            -1, 0, 0, 0,
             0, 1, 0, 0,
             0, 0, -1, 0,
+            0, 0, 0, 1
+        ]);
+        return this._aplicarTransformacao(vector, matriz, 3);
+    }
+
+    // Simetria em relação ao eixo Z em 3D:
+    // mantém Z e inverte X e Y.
+    reflection3DZ(vector) {
+        const matriz = new Matrix(4, 4, [
+            -1, 0, 0, 0,
+            0, -1, 0, 0,
+            0, 0, 1, 0,
             0, 0, 0, 1
         ]);
         return this._aplicarTransformacao(vector, matriz, 3);
